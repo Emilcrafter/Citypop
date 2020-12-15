@@ -84,7 +84,9 @@ var q = route.params.textInputValue.trim();
     const firstElem = cityList.map((item) => item.name)[0];
       var valid = (q) => {return(firstElem === q)};
   if(valid(q)){
+    const population = cityList.map((item) => item.population)[0];
   return(
+    /*
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       
       <Text>Cities Screen</Text>
@@ -120,6 +122,13 @@ var q = route.params.textInputValue.trim();
       keyExtractor = {(item) => item.geonameID}
       />
     </View>
+    */
+   <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+   <StatusBar></StatusBar>
+   <Text style = {styles.text}>{firstElem}</Text>
+   <Text style = {styles.text}>Population</Text>
+   <Text style = {styles.text}>{population}</Text>
+ </View>
   )
 }
 else{
