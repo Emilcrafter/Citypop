@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import {Text, View, Button, TextInput , StyleSheet, Pressable} from 'react-native';
+import {Text, View, Button, TextInput , StyleSheet, ActivityIndicator} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
@@ -26,7 +26,6 @@ function HomeScreen({ navigation }){
     </View>
   )
 }
-
 function CitySearch({ navigation }){
   const [textInputValue, onChangeText] = React.useState('');
   return(
@@ -70,96 +69,71 @@ function CountrySearch({ navigation }){
 
 
 function CitySearchResult({ route, navigation }){
-const [cityList, setCityList] = useState([]);  
+const [cityList, setCityList] = useState([]);
+const [isLoading, setLoading] = useState(true);
+if(route.params.population){
+  return(
+    <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+    <StatusBar></StatusBar>
+    <Text style = {styles.text}>{route.params.cityName}</Text>
+    <Text style = {styles.text}>Population</Text>
+    <Text style = {styles.text}>{route.params.population}</Text>
+  </View>
+  )
+}
 var q = route.params.textInputValue.trim();
   useEffect(()=> {
-    var q = route.params.textInputValue;
     console.log(q);
     fetch(
       'http://api.geonames.org/searchJSON?username=weknowit&cities=cities1000&q=' + q)
       .then((response) => response.json())
       .then((json) => setCityList(json.geonames))
+      .then(console.log(cityList))
       .catch((error) => console.error(error))
+      .finally(() => setLoading(false))
     }, []);
-    const firstElem = cityList.map((item) => item.name)[0];
-      var valid = (q) => {return(firstElem === q)};
-  if(valid(q)){
+    if(isLoading){
+      return(
+        <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator/>
+        </View>
+      )
+    }
+    else{
+
+      var firstElem = cityList.map((item) => item.name)[0];
+      var valid = (q) => {return(firstElem.toLowerCase() === q.toLowerCase())};
+    
+
     const population = cityList.map((item) => item.population)[0];
-  return(
-    /*
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      
-      <Text>Cities Screen</Text>
-      
-      <FlatList 
-      data = {cityList}
-      renderItem={({item}) => (
-        
-        <TouchableHighlight onPress = {() => navigation.navigate( 
-          "CityPop",
-        {
-          key: item.geonameID,
-          cityName: item.name,
-          population: item.population, 
-        }
-        
-        )}>
-          <View
-          style = {{
-            height: 50,
-            backgroundColor: "aliceblue"
-          }}
-          
-          >
+      if(valid(q))
+      {
+        return(
+          <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+            <StatusBar></StatusBar>
+            <Text style = {styles.text}>{firstElem}</Text>
+            <Text style = {styles.text}>Population</Text>
+            <Text style = {styles.text}>{population}</Text>
+          </View>
+      )}
+  else{
+    return(
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Text style ={{ 
             fontSize: 20,
-            marginRight: 150,
-          }}>{(item.name)}</Text>
-          </View>
-        </TouchableHighlight>
-      )} 
-      contentContainerStyle = {styles.container}
-      keyExtractor = {(item) => item.geonameID}
-      />
-    </View>
-    */
-   <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
-   <StatusBar></StatusBar>
-   <Text style = {styles.text}>{firstElem}</Text>
-   <Text style = {styles.text}>Population</Text>
-   <Text style = {styles.text}>{population}</Text>
- </View>
-  )
-}
-else{
-  return(
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style ={{ 
-          fontSize: 20,
-        }}>{"No city with the name " + q + " was found."}</Text>
-            <Button 
-            title="Return to search"
-            onPress={() => navigation.goBack()}
-            />
+          }}>{"No city with the name " + q + " was found."}</Text>
+              <Button 
+              title="Return to search"
+              onPress={() => navigation.goBack()}
+              />
+  
+      </View>
+    )
+  }
+  }
 
-    </View>
-  )
-}
 }
 
-
-
-function CityPop({ route, navigation }){
-  console.log(route)
-  return(
-    <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
-      <StatusBar></StatusBar>
-      <Text style = {styles.text}>{route.params.cityName}</Text>
-      <Text style = {styles.text}>Population</Text>
-      <Text style = {styles.text}>{route.params.population}</Text>
-    </View>
-  )
-}
 function Country({ route, navigation }){
   const [cityList, setCityList] = useState([]); 
   var q = route.params.textInputValue.trim();
@@ -171,19 +145,41 @@ function Country({ route, navigation }){
         .then((json) => setCityList(json.geonames))
         .catch((error) => console.error(error))
       }, []);
-      const firstElem = cityList.map((item) => item.countryName)[0];
-      var valid = (q) => {return(firstElem === q)};
+      var purgedList = cityList.map((item) => {
+        if(item.countryName.toLowerCase() === q.toLowerCase()){
+          console.log(item.countryName + "AAAAA")
+          return(item)
+        }
+        else{
+          console.log(item.countryName)
+          return(null)
+        }
+      })
+      var done = false
+      purgedList = purgedList.filter((item) => { done = true; return(item != null)});
+      const firstElem = purgedList.map((item) => item.countryName)[0];
+      console.log(done)
+      if(firstElem && done){
+      var valid = (q) => {return(firstElem.toLowerCase() === q.toLowerCase())};
         console.log(valid(q))
+}
+    else{
+      return(
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator></ActivityIndicator>
+        </View>
+      )
+    }
     if(valid(q)){
     return(
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <FlatList 
-        data = {cityList.map((item) => item)}
+        data = {purgedList.map((item) => item)}
         key = {(item) => item.geonameID}
         renderItem={({item}) => (
           
           <TouchableHighlight onPress = {() => navigation.navigate( 
-            "CityPop",
+            "CitySearchResult",
           {
             key: item.geonameID,
             cityName: item.name,
@@ -256,11 +252,6 @@ export default function App() {
         name = "CitySearchResult" 
         component = {CitySearchResult}  
         options = {{title: "Search results"}}
-        />
-        <Stack.Screen 
-        name = "CityPop" 
-        component = {CityPop}  
-        options = {{title: "Population"}}
         />
         <Stack.Screen 
         name = "Country" 
