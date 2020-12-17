@@ -88,7 +88,6 @@ var q = route.params.textInputValue.trim();
       'http://api.geonames.org/searchJSON?username=weknowit&cities=cities1000&q=' + q)
       .then((response) => response.json())
       .then((json) => setCityList(json.geonames))
-      .then(console.log(cityList))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false))
     }, []);
@@ -136,6 +135,7 @@ var q = route.params.textInputValue.trim();
 
 function Country({ route, navigation }){
   const [cityList, setCityList] = useState([]); 
+  const [isLoading, setLoading] = useState(true);
   var q = route.params.textInputValue.trim();
     useEffect(()=> {
       console.log(q);
@@ -144,10 +144,18 @@ function Country({ route, navigation }){
         .then((response) => response.json())
         .then((json) => setCityList(json.geonames))
         .catch((error) => console.error(error))
+        .finally(() => setLoading(false))
       }, []);
+      if(isLoading){
+        return(
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <ActivityIndicator></ActivityIndicator>
+          </View>
+        )
+      }
+      else{
       var purgedList = cityList.map((item) => {
         if(item.countryName.toLowerCase() === q.toLowerCase()){
-          console.log(item.countryName + "AAAAA")
           return(item)
         }
         else{
@@ -155,75 +163,66 @@ function Country({ route, navigation }){
           return(null)
         }
       })
-      var done = false
-      purgedList = purgedList.filter((item) => { done = true; return(item != null)});
+      purgedList = purgedList.filter((item) => {return(item != null)});
       const firstElem = purgedList.map((item) => item.countryName)[0];
-      console.log(done)
-      if(firstElem && done){
-      var valid = (q) => {return(firstElem.toLowerCase() === q.toLowerCase())};
-        console.log(valid(q))
-}
-    else{
-      return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <ActivityIndicator></ActivityIndicator>
-        </View>
-      )
-    }
-    if(valid(q)){
-    return(
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <FlatList 
-        data = {purgedList.map((item) => item)}
-        key = {(item) => item.geonameID}
-        renderItem={({item}) => (
-          
-          <TouchableHighlight onPress = {() => navigation.navigate( 
-            "CitySearchResult",
-          {
-            key: item.geonameID,
-            cityName: item.name,
-            population: item.population, 
-          }
-          
-          )}>
-
-            <View
-            style = {{
-              height: 50,
-              backgroundColor: "aliceblue"
-            }}
-            
-            >
-            <Text style ={{ 
-              fontSize: 20,
-              marginRight: 150,
-            }}>{(item.name)}</Text>
+      valid = (q) => {return(q === firstElem)}
+      if(valid(q)){
+        return(
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <FlatList 
+            data = {purgedList.map((item) => item)}
+            key = {(item) => item.geonameID}
+            renderItem={({item}) => (
+              
+              <TouchableHighlight onPress = {() => navigation.navigate( 
+                "CitySearchResult",
+              {
+                key: item.geonameID,
+                cityName: item.name,
+                population: item.population, 
+              }
+              
+              )}>
+    
+                <View
+                style = {{
+                  height: 50,
+                  backgroundColor: "aliceblue"
+                }}
+                
+                >
+                <Text style ={{ 
+                  fontSize: 20,
+                  marginRight: 150,
+                }}>{(item.name)}</Text>
+                </View>
+              </TouchableHighlight>
+            )} 
+            contentContainerStyle = {styles.container}
+            keyExtractor = {(item) => item.geonameID}
+            />
+          </View>
+        )}
+        else{
+          return(
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style ={{ 
+                  fontSize: 20,
+                }}>{"No country with the name " + q + " was found."}</Text>
+                    <Button 
+                    title="Return to search"
+                    onPress={() => navigation.goBack()}
+                    />
+    
             </View>
-          </TouchableHighlight>
-        )} 
-        contentContainerStyle = {styles.container}
-        keyExtractor = {(item) => item.geonameID}
-        />
-      </View>
-    )}
-    else{
-      return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text style ={{ 
-              fontSize: 20,
-            }}>{"No country with the name " + q + " was found."}</Text>
-                <Button 
-                title="Return to search"
-                onPress={() => navigation.goBack()}
-                />
+    
+    
+          )
+        }
+}
+}
 
-        </View>
-
-
-      )
-    }
-  }
+  
   
 
 
