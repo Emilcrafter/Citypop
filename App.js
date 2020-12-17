@@ -177,8 +177,8 @@ function Country({ route, navigation }){
               <TouchableHighlight onPress = {() => navigation.navigate( 
                 "CitySearchResult",
               {
-                key: item.geonameID,
-                cityName: item.name,
+                key: (item) => item.geonameID,
+                cityName:  item.name,
                 population: item.population, 
               }
               
