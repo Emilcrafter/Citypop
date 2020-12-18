@@ -163,9 +163,9 @@ function Country({ route, navigation }){
           return(null)
         }
       })
-      purgedList = purgedList.filter((item) => {return(item != null)});
+      purgedList = purgedList.filter((item) => {return(item != null)}).sort((i1, i2) => i2.population-i1.population);
       const firstElem = purgedList.map((item) => item.countryName)[0];
-      valid = (q) => {return(q === firstElem)}
+      var valid = (q) => {return(q === firstElem)}
       if(valid(q)){
         return(
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
