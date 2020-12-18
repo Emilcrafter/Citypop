@@ -6,13 +6,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
 
 function HomeScreen({ navigation }){
   return(
-    <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
       <StatusBar></StatusBar>
       <Text>Home Screen</Text>
       <Button 
@@ -23,15 +24,16 @@ function HomeScreen({ navigation }){
       title="Search by country"
       onPress={() => navigation.navigate('CountrySearch')}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 function CitySearch({ navigation }){
   const [textInputValue, onChangeText] = React.useState('');
   return(
-    <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
       <StatusBar></StatusBar>
-      <Text>Home Screen</Text>
+      <Text>City Search</Text>
+      <SafeAreaView height = {50}></SafeAreaView>
       <TextInput
         style={{ width:300, height: 50, borderColor: 'gray', borderWidth: 1}}
         onChangeText={text => onChangeText(text)}
@@ -42,26 +44,28 @@ function CitySearch({ navigation }){
       title="Search by city"
       onPress={() => navigation.navigate('CitySearchResult', {textInputValue})}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
 function CountrySearch({ navigation }){
   const [textInputValue, onChangeText] = React.useState('');
   return(
-    <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
       <StatusBar></StatusBar>
-      <Text>Home Screen</Text>
+      <Text>Country Search</Text>
+      <SafeAreaView height = {50}></SafeAreaView>
       <TextInput
         style={{ width:300, height: 50, borderColor: 'gray', borderWidth: 1}}
         onChangeText={text => onChangeText(text)}
         textInputValue={textInputValue}
+        onSubmitEditing={() => navigation.navigate('Country', {textInputValue})}
     />
       <Button 
       title="Search by country"
       onPress={() => navigation.navigate('Country', {textInputValue})}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -73,12 +77,12 @@ const [cityList, setCityList] = useState([]);
 const [isLoading, setLoading] = useState(true);
 if(route.params.population){
   return(
-    <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
     <StatusBar></StatusBar>
     <Text style = {styles.text}>{route.params.cityName}</Text>
     <Text style = {styles.text}>Population</Text>
     <Text style = {styles.text}>{route.params.population}</Text>
-  </View>
+  </SafeAreaView>
   )
 }
 var q = route.params.textInputValue.trim();
@@ -93,9 +97,9 @@ var q = route.params.textInputValue.trim();
     }, []);
     if(isLoading){
       return(
-        <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+        <SafeAreaView style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator/>
-        </View>
+        </SafeAreaView>
       )
     }
     else{
@@ -108,16 +112,16 @@ var q = route.params.textInputValue.trim();
       if(valid(q))
       {
         return(
-          <View style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
+          <SafeAreaView style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
             <StatusBar></StatusBar>
             <Text style = {styles.text}>{firstElem}</Text>
             <Text style = {styles.text}>Population</Text>
             <Text style = {styles.text}>{population}</Text>
-          </View>
+          </SafeAreaView>
       )}
   else{
     return(
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Text style ={{ 
             fontSize: 20,
           }}>{"No city with the name " + q + " was found."}</Text>
@@ -126,7 +130,7 @@ var q = route.params.textInputValue.trim();
               onPress={() => navigation.goBack()}
               />
   
-      </View>
+      </SafeAreaView>
     )
   }
   }
@@ -148,9 +152,9 @@ function Country({ route, navigation }){
       }, []);
       if(isLoading){
         return(
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <ActivityIndicator></ActivityIndicator>
-          </View>
+          </SafeAreaView>
         )
       }
       else{
@@ -168,7 +172,7 @@ function Country({ route, navigation }){
       var valid = (q) => {return(q === firstElem)}
       if(valid(q)){
         return(
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <FlatList 
             data = {purgedList.map((item) => item)}
             key = {(item) => item.geonameID}
@@ -184,7 +188,7 @@ function Country({ route, navigation }){
               
               )}>
     
-                <View
+                <SafeAreaView
                 style = {{
                   height: 50,
                   backgroundColor: "aliceblue"
@@ -195,17 +199,17 @@ function Country({ route, navigation }){
                   fontSize: 20,
                   marginRight: 150,
                 }}>{(item.name)}</Text>
-                </View>
+                </SafeAreaView>
               </TouchableHighlight>
             )} 
             contentContainerStyle = {styles.container}
             keyExtractor = {(item) => item.geonameID}
             />
-          </View>
+          </SafeAreaView>
         )}
         else{
           return(
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style ={{ 
                   fontSize: 20,
                 }}>{"No country with the name " + q + " was found."}</Text>
@@ -214,7 +218,7 @@ function Country({ route, navigation }){
                     onPress={() => navigation.goBack()}
                     />
     
-            </View>
+            </SafeAreaView>
     
     
           )
