@@ -104,7 +104,10 @@ var q = route.params.textInputValue.trim();
     else{
 
       var firstElem = cityList.map((item) => item.name)[0];
-      var valid = (q) => {return(firstElem.toLowerCase() === q.toLowerCase())};
+      if(firstElem){
+        var valid = (q) => {return(firstElem.toLowerCase() === q.toLowerCase())};
+      
+      
     
 
     const population = cityList.map((item) => item.population)[0];
@@ -118,6 +121,7 @@ var q = route.params.textInputValue.trim();
             <Text style = {styles.text}>{population}</Text>
           </SafeAreaView>
       )}
+        }
   else{
     return(
       <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -168,7 +172,8 @@ function Country({ route, navigation }){
       })
       purgedList = purgedList.filter((item) => {return(item != null)}).sort((i1, i2) => i2.population-i1.population);
       const firstElem = purgedList.map((item) => item.countryName)[0];
-      var valid = (q) => {return(q === firstElem)}
+      if(firstElem){
+      var valid = (q) => {return(q.toLowerCase() === firstElem.toLowerCase())}
       if(valid(q)){
         return(
           <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -206,6 +211,7 @@ function Country({ route, navigation }){
             />
           </SafeAreaView>
         )}
+              }
         else{
           return(
             <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
