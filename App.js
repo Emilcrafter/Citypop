@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
+import SearchScreen from './SearchScreen';
 
 
 
@@ -66,23 +67,15 @@ function CitySearch({ navigation }){
  */
 function CountrySearch({ navigation }){
   //initializes state used in search bar
-  const [textInputValue, onChangeText] = React.useState('');
+  
   return(
-    <SafeAreaView style={styles.standardView}>
-      <StatusBar></StatusBar>
-      <Text>Country Search</Text>
-      <SafeAreaView height = {50}></SafeAreaView>
-      <TextInput
-        style={{ width:300, height: 50, borderColor: 'gray', borderWidth: 1}}
-        onChangeText={text => onChangeText(text)}
-        textInputValue={textInputValue}
-        onSubmitEditing={() => navigation.navigate('Country', {textInputValue})}
+    <SearchScreen 
+    style = {styles.standardView}
+    searchLabel = {"Country"}
+    buttonText = {'Search by Country'}
+    buttonDestination = {"Country"}
+    navigation = {navigation}
     />
-      <Button 
-      title="Search by country"
-      onPress={() => navigation.navigate('Country', {textInputValue})}
-      />
-    </SafeAreaView>
   )
 }
 
@@ -183,6 +176,7 @@ function Country({ route, navigation }){
   //Initializes the states used for handling the API call
   const [cityList, setCityList] = useState([]); 
   const [isLoading, setLoading] = useState(true);
+  console.log(route)
   //Removes whitespace around user input to avoid unnecessary errors
   var q = route.params.textInputValue.trim();
     useEffect(()=> {
