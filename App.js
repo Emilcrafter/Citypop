@@ -36,42 +36,32 @@ function HomeScreen({ navigation }){
  * The search window used for instant searches of cities.
  * 
  * @param {*} navigation object passed to keep track of navigation state in NavigationContainer
- * @returns {SafeAreaView} Search window with a TextInput search bar and a submit button
+ * @returns {SearchScreen} Search window with a TextInput search bar and a submit button
  */
 function CitySearch({ navigation }){
-  //initializes state used in search bar
-  const [textInputValue, onChangeText] = React.useState('');
+//Returns SearchScreen component with props differentiating it from CountrySearch()
   return(
-    <SafeAreaView style={styles.standardView}>
-      <StatusBar></StatusBar>
-      <Text>City Search</Text>
-      <SafeAreaView height = {50}></SafeAreaView>
-      <TextInput
-        style={{ width:300, height: 50, borderColor: 'gray', borderWidth: 1}}
-        onChangeText={text => onChangeText(text)}
-        textInputValue={textInputValue}
-        onSubmitEditing={() => navigation.navigate('CitySearchResult', {textInputValue})}
+    <SearchScreen 
+    style = {styles.standardView}
+    searchLabel = {'City'}
+    buttonText = {'Search by City'}
+    buttonDestination = {"CitySearchResult"}
+    navigation = {navigation}
     />
-      <Button 
-      title="Search by city"
-      onPress={() => navigation.navigate('CitySearchResult', {textInputValue})}
-      />
-    </SafeAreaView>
   )
 }
 /**
  * The search window used for searches of top populated cities in a country.
  * 
  * @param {*} navigation object passed to keep track of navigation state in NavigationContainer
- * @returns {SafeAreaView} Search window with a TextInput search bar and a submit button
+ * @returns {SearchScreen} Search window with a TextInput search bar and a submit button
  */
 function CountrySearch({ navigation }){
-  //initializes state used in search bar
-  
+  //Returns SearchScreen component with props differentiating it from CitySearch()
   return(
     <SearchScreen 
     style = {styles.standardView}
-    searchLabel = {"Country"}
+    searchLabel = {'Country'}
     buttonText = {'Search by Country'}
     buttonDestination = {"Country"}
     navigation = {navigation}

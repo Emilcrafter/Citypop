@@ -6,7 +6,7 @@ export default class SearchScreen extends React.Component{
     constructor(props){
       console.log(props)
         super(props);
-        this.searchlabel = props.searchlabel;
+        this.searchLabel = props.searchLabel;
         this.buttonText = props.buttonText;
         this.buttonDestination = props.buttonDestination;
         this.navigation = props.navigation;
@@ -18,7 +18,7 @@ export default class SearchScreen extends React.Component{
     return(
     <SafeAreaView style={this.style}>
       <StatusBar></StatusBar>
-      <Text>{this.searchlabel}</Text>
+      <Text>{this.searchLabel}</Text>
       <SafeAreaView height = {50}></SafeAreaView>
       <TextInput
         style={{ width:300, height: 50, borderColor: 'gray', borderWidth: 1}}
