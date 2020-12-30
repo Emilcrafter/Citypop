@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
 import SearchScreen from './SearchScreen';
+import ErrorScreen from './ErrorScreen';
 
 
 
@@ -140,16 +141,12 @@ var q = route.params.textInputValue.trim();
   //if it didn't, show the user an error message on screen and prompt them to try searching again
   else{
     return(
-      <SafeAreaView style={styles.standardView}>
-          <Text style ={{ 
-            fontSize: 20,
-          }}>{"No city with the name " + q + " was found."}</Text>
-              <Button 
-              title="Return to search"
-              onPress={() => navigation.goBack()}
-              />
-  
-      </SafeAreaView>
+      <ErrorScreen
+      areaType = {"city"}
+      query = {q}
+      style = {styles.standardView}
+      navigation = {navigation}
+      />
     )
   }
   }
@@ -252,16 +249,12 @@ function Country({ route, navigation }){
         else{
           //if it wasn't a valid search, displays an error message to the user ant promt them to search again
           return(
-            <SafeAreaView style={styles.standardView}>
-                <Text style ={{ 
-                  fontSize: 20,
-                }}>{"No country with the name " + q + " was found."}</Text>
-                    <Button 
-                    title="Return to search"
-                    onPress={() => navigation.goBack()}
-                    />
-    
-            </SafeAreaView>
+            <ErrorScreen
+            areaType = {"country"}
+            query = {q}
+            style = {styles.standardView}
+            navigation = {navigation}
+            />
     
     
           )
