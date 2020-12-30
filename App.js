@@ -7,6 +7,7 @@ import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
 import SearchScreen from './SearchScreen';
 import ErrorScreen from './ErrorScreen';
+import PopulationScreen from './PopulationScreen';
 
 
 
@@ -17,6 +18,16 @@ import ErrorScreen from './ErrorScreen';
  * @param {*} navigation object passed to keep track of navigation state in NavigationContainer
  * @returns {SafeAreaView} Home screen with navigation buttons
  */
+
+ /**
+  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+  * @param {*} string 
+  * @returns {String} with escaped regexp characters so users will have a harder time 
+  */
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function HomeScreen({ navigation }){
   return(
     <SafeAreaView style={styles.standardView}>
@@ -87,12 +98,12 @@ const [isLoading, setLoading] = useState(true);
 if(route.params.population){
   //simply display the population of a city, as the app was designed to do
   return(
-    <SafeAreaView style={styles.standardView}>
-    <StatusBar></StatusBar>
-    <Text style = {styles.text}>{route.params.cityName}</Text>
-    <Text style = {styles.text}>Population</Text>
-    <Text style = {styles.text}>{route.params.population}</Text>
-  </SafeAreaView>
+    <PopulationScreen
+    cityName = {route.params.cityName}
+    population = {route.params.population}
+    style = {styles.standardView}
+    textStyle = {styles.text}
+    />
   )
 }
 var q = route.params.textInputValue.trim();
@@ -130,12 +141,12 @@ var q = route.params.textInputValue.trim();
       if(valid(q))
       {
         return(
-          <SafeAreaView style={{flex : 1, alignItems: 'center', justifyContent: 'center'}}>
-            <StatusBar></StatusBar>
-            <Text style = {styles.text}>{firstElem}</Text>
-            <Text style = {styles.text}>Population</Text>
-            <Text style = {styles.text}>{population}</Text>
-          </SafeAreaView>
+          <PopulationScreen
+          cityName = {firstElem}
+          population = {population}
+          style = {styles.standardView}
+          textStyle = {styles.text}
+          />
       )}
         }
   //if it didn't, show the user an error message on screen and prompt them to try searching again
