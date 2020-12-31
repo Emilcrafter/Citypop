@@ -5,10 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
-import SearchScreen from './SearchScreen';
-import ErrorScreen from './ErrorScreen';
-import PopulationScreen from './PopulationScreen';
-import CityListCountry from './CityListCountry';
+import SearchScreen from './Components/SearchScreen';
+import ErrorScreen from './Components/ErrorScreen';
+import PopulationScreen from './Components/PopulationScreen';
+import CityListCountry from './Components/CityListCountry';
+import HomeScreen from './Screens/HomeScreen';
 
 
 
@@ -28,22 +29,6 @@ function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
-function HomeScreen({ navigation }){
-  return(
-    <SafeAreaView style={styles.standardView}>
-      <StatusBar></StatusBar>
-      <Text>Home Screen</Text>
-      <Button 
-      title="Search by city"
-      onPress={() => navigation.navigate('CitySearch')}
-      />
-            <Button 
-      title="Search by country"
-      onPress={() => navigation.navigate('CountrySearch')}
-      />
-    </SafeAreaView>
-  )
-}
 /**
  * The search window used for instant searches of cities.
  * 
