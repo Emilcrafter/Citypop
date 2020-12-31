@@ -1,13 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import {Text, View, Button, TextInput , StyleSheet, ActivityIndicator, SafeAreaView} from 'react-native';
+import {StyleSheet, ActivityIndicator, SafeAreaView} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { FlatList, TouchableHighlight } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
-import SearchScreen from './Components/SearchScreen';
 import ErrorScreen from './Components/ErrorScreen';
-import PopulationScreen from './Components/PopulationScreen';
 import CityListCountry from './Components/CityListCountry';
 import HomeScreen from './Screens/HomeScreen';
 import CitySearchResult from './Screens/CitySearchResult';
