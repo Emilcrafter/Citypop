@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import SearchScreen from './SearchScreen';
 import ErrorScreen from './ErrorScreen';
 import PopulationScreen from './PopulationScreen';
-
+import CityListCountry from './CityListCountry';
 
 
 
@@ -106,7 +106,7 @@ if(route.params.population){
     />
   )
 }
-var q = route.params.textInputValue.trim();
+var q = escapeRegExp(route.params.textInputValue.trim());
   useEffect(()=> {
     console.log(q);
     fetch(
@@ -135,6 +135,7 @@ var q = route.params.textInputValue.trim();
       //if there was even anything received from the search, checks if the name matches what the user did input
       if(firstElem){
         var valid = (q) => {return(firstElem.toLowerCase() === q.toLowerCase())};
+        console.log(q + "fdsfd")
     //initializes a constant "population" which is exactly what you'd think
     const population = cityList.map((item) => item.population)[0];
         //if the search result matched the search term, display the population count for the searched city
@@ -148,9 +149,21 @@ var q = route.params.textInputValue.trim();
           textStyle = {styles.text}
           />
       )}
+      else{
+        console.log(q)
+        return(
+          <ErrorScreen
+          areaType = {"city"}
+          query = {q}
+          style = {styles.standardView}
+          navigation = {navigation}
+          />
+        )
+      }
         }
   //if it didn't, show the user an error message on screen and prompt them to try searching again
   else{
+
     return(
       <ErrorScreen
       areaType = {"city"}
@@ -176,7 +189,7 @@ function Country({ route, navigation }){
   const [isLoading, setLoading] = useState(true);
   console.log(route)
   //Removes whitespace around user input to avoid unnecessary errors
-  var q = route.params.textInputValue.trim();
+  var q = escapeRegExp(route.params.textInputValue.trim());
     useEffect(()=> {
       //Requests a JSON response from the geonames API with a pre-written query(?) ending with a dynamic search term
       fetch(
@@ -221,40 +234,12 @@ function Country({ route, navigation }){
       //if it was actually a valid element, display all of purgedList, allowing users to press each city as a button and get sent to another window
       if(valid(q)){
         return(
-          <SafeAreaView style={styles.standardView}>
-            <FlatList 
-            data = {purgedList.map((item) => item)}
-            key = {(item) => item.geonameID}
-            renderItem={({item}) => (
-              
-              <TouchableHighlight onPress = {() => navigation.navigate( 
-                "CitySearchResult",
-              {
-                key: (item) => item.geonameID,
-                cityName:  item.name,
-                population: item.population, 
-              }
-              
-              )}>
-    
-                <SafeAreaView
-                style = {{
-                  height: 50,
-                  backgroundColor: "aliceblue"
-                }}
-                
-                >
-                <Text style ={{ 
-                  fontSize: 20,
-                  marginRight: 150,
-                }}>{(item.name)}</Text>
-                </SafeAreaView>
-              </TouchableHighlight>
-            )} 
-            contentContainerStyle = {styles.container}
-            keyExtractor = {(item) => item.geonameID}
-            />
-          </SafeAreaView>
+          <CityListCountry
+          style = {styles.standardView}
+          inputArray = {purgedList}
+          navigation = {navigation}
+          contentContainerStyle = {styles.container}
+          />
         )}
               }
         else{
@@ -301,7 +286,7 @@ export default function App() {
         <Stack.Screen 
         name = "Country" 
         component = {Country}  
-        options = {({ route }) => ({title: route.params.textInputValue})}
+        options = {{title: "Search results"}}
         />
         <Stack.Screen 
         name = "CitySearchResult" 
