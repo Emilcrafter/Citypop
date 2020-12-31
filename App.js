@@ -12,6 +12,7 @@ import CityListCountry from './Components/CityListCountry';
 import HomeScreen from './Screens/HomeScreen';
 import CitySearchResult from './Screens/CitySearchResult';
 import CitySearch from './Screens/CitySearch';
+import CountrySearch from './Screens/CountrySearch';
 
 
 /**
@@ -30,32 +31,7 @@ function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
-/**
- * The search window used for instant searches of cities.
- * 
- * @param {*} navigation object passed to keep track of navigation state in NavigationContainer
- * @returns {SearchScreen} Search window with a TextInput search bar and a submit button
- */
 
-    /**
-     * The search window used for searches of top populated cities in a country.
-     * 
-     * @param {*} navigation object passed to keep track of navigation state in NavigationContainer
-     * @returns {SearchScreen} Search window with a TextInput search bar and a submit button
-     */
-    function CountrySearch({ navigation }){
-      //Returns SearchScreen component with props differentiating it from CitySearch()
-      return(
-        <SearchScreen 
-        style = {styles.standardView}
-        searchLabel = {'Country'}
-        buttonText = {'Search by Country'}
-        buttonDestination = {"Country"}
-        navigation = {navigation}
-        />
-      )
-    }
-    
 
 
 /**
