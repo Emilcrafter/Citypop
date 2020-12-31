@@ -11,7 +11,7 @@ import PopulationScreen from './Components/PopulationScreen';
 import CityListCountry from './Components/CityListCountry';
 import HomeScreen from './Screens/HomeScreen';
 import CitySearchResult from './Screens/CitySearchResult';
-
+import CitySearch from './Screens/CitySearch';
 
 
 /**
@@ -36,39 +36,26 @@ function escapeRegExp(string) {
  * @param {*} navigation object passed to keep track of navigation state in NavigationContainer
  * @returns {SearchScreen} Search window with a TextInput search bar and a submit button
  */
-function CitySearch({ navigation }){
-//Returns SearchScreen component with props differentiating it from CountrySearch()
-  return(
-    <SearchScreen 
-    style = {styles.standardView}
-    searchLabel = {'City'}
-    buttonText = {'Search by City'}
-    buttonDestination = {"CitySearchResult"}
-    navigation = {navigation}
-    />
-  )
-}
-/**
- * The search window used for searches of top populated cities in a country.
- * 
- * @param {*} navigation object passed to keep track of navigation state in NavigationContainer
- * @returns {SearchScreen} Search window with a TextInput search bar and a submit button
- */
-function CountrySearch({ navigation }){
-  //Returns SearchScreen component with props differentiating it from CitySearch()
-  return(
-    <SearchScreen 
-    style = {styles.standardView}
-    searchLabel = {'Country'}
-    buttonText = {'Search by Country'}
-    buttonDestination = {"Country"}
-    navigation = {navigation}
-    />
-  )
-}
 
-
-
+    /**
+     * The search window used for searches of top populated cities in a country.
+     * 
+     * @param {*} navigation object passed to keep track of navigation state in NavigationContainer
+     * @returns {SearchScreen} Search window with a TextInput search bar and a submit button
+     */
+    function CountrySearch({ navigation }){
+      //Returns SearchScreen component with props differentiating it from CitySearch()
+      return(
+        <SearchScreen 
+        style = {styles.standardView}
+        searchLabel = {'Country'}
+        buttonText = {'Search by Country'}
+        buttonDestination = {"Country"}
+        navigation = {navigation}
+        />
+      )
+    }
+    
 
 
 /**
